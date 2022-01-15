@@ -23,4 +23,12 @@ export class ProductsService {
   async findById(id: string): Promise<Product> {
     return this.productModel.findById(id).exec();
   }
+
+  async findByIds(ids: string[]): Promise<Product[]> {
+    return this.productModel
+      .find({
+        _id: { $in: ids },
+      })
+      .exec();
+  }
 }
