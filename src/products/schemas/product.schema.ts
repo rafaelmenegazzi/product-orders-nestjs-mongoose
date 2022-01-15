@@ -15,6 +15,16 @@ export class Product extends BaseEntity {
 
   @Prop({ required: true })
   sku: number;
+
+  @Prop({ enum: ['IN_STOCK', 'SOLD'], default: 'IN_STOCK' })
+  status: string;
+
+  public sell() {
+    if (this.status !== 'IN_STOCK') {
+      throw new Error('Product no longer available');
+    }
+    this.status = 'SOLD';
+  }
 }
 
 export const ProductSchema = SchemaFactory.createForClass(Product);

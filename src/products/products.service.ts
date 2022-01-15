@@ -12,6 +12,8 @@ export class ProductsService {
     @InjectModel(Product.name) private productModel: Model<ProductDocument>,
   ) {}
 
+  opts = { runValidators: true };
+
   async create(createProductDto: CreateProductDto): Promise<Product> {
     const createdProduct = new this.productModel(createProductDto);
     return createdProduct.save();
@@ -34,5 +36,16 @@ export class ProductsService {
       })
       .exec();
     return products.map((p) => plainToClass(Product, p.toJSON()));
+  }
+
+  async sell(productIds: string[]): Promise<Product[]> {
+    const products = await this.findByIds(productIds);
+    products.forEach((p) => p.sell());
+    await Promise.all(
+      products.map((p) =>
+        this.productModel.findByIdAndUpdate(p._id, p, this.opts),
+      ),
+    );
+    return products;
   }
 }

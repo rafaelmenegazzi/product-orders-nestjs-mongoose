@@ -15,9 +15,7 @@ export class OrdersService {
   ) {}
 
   async create(createOrderDto: CreateOrderDto): Promise<Order> {
-    const products = await this.productsService.findByIds(
-      createOrderDto.productIds,
-    );
+    const products = await this.productsService.sell(createOrderDto.productIds);
     const createdOrder = new this.orderModel({
       customerName: createOrderDto.customerName,
       products,
