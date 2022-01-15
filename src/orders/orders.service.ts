@@ -1,6 +1,7 @@
-import { Model } from 'mongoose';
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
+import { plainToClass } from 'class-transformer';
+import { Model } from 'mongoose';
 
 import { ProductsService } from '../products/products.service';
 import { Order, OrderDocument } from './schemas/order.schema';
@@ -17,11 +18,15 @@ export class OrdersService {
     const products = await this.productsService.findByIds(
       createOrderDto.productIds,
     );
-    const createdOrder = new this.orderModel({ products });
+    const createdOrder = new this.orderModel({
+      customerName: createOrderDto.customerName,
+      products,
+    });
     return createdOrder.save();
   }
 
   async findAll(): Promise<Order[]> {
-    return this.orderModel.find().exec();
+    const orders = await this.orderModel.find().populate('products');
+    return orders.map((o) => plainToClass(Order, o.toJSON()));
   }
 }

@@ -1,6 +1,7 @@
-import { Model } from 'mongoose';
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
+import { plainToClass } from 'class-transformer';
+import { Model } from 'mongoose';
 
 import { Product, ProductDocument } from './schemas/product.schema';
 import { CreateProductDto } from './dto/create-product.dto';
@@ -17,18 +18,21 @@ export class ProductsService {
   }
 
   async findAll(): Promise<Product[]> {
-    return this.productModel.find().exec();
+    const products = await this.productModel.find().exec();
+    return products.map((p) => plainToClass(Product, p.toJSON()));
   }
 
   async findById(id: string): Promise<Product> {
-    return this.productModel.findById(id).exec();
+    const product = await this.productModel.findById(id).exec();
+    return plainToClass(Product, product.toJSON());
   }
 
   async findByIds(ids: string[]): Promise<Product[]> {
-    return this.productModel
+    const products = await this.productModel
       .find({
         _id: { $in: ids },
       })
       .exec();
+    return products.map((p) => plainToClass(Product, p.toJSON()));
   }
 }
