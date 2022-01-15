@@ -1,13 +1,16 @@
 import { Module } from '@nestjs/common';
-import { MongooseModule } from '@nestjs/mongoose';
+import { ConfigModule } from '@nestjs/config';
 
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { DataBaseModule } from './database/database.module';
 import { ProductsModule } from './products/products.module';
+import configuration from './config/configuration';
 
 @Module({
   imports: [
-    MongooseModule.forRoot('mongodb://localhost:27017/costumer-orders'),
+    ConfigModule.forRoot({ load: [configuration] }),
+    DataBaseModule,
     ProductsModule,
   ],
   controllers: [AppController],
