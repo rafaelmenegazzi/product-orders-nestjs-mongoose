@@ -12,6 +12,9 @@ export class Product extends BaseEntity {
 
   @Prop({ required: true })
   price: number;
+
+  @Prop({ required: true })
+  sku: number;
 }
 
 export const ProductSchema = SchemaFactory.createForClass(Product);
