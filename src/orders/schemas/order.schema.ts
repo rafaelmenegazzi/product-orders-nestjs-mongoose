@@ -17,4 +17,6 @@ export class Order extends BaseEntity {
   customerName: string;
 }
 
-export const OrderSchema = SchemaFactory.createForClass(Order);
+const OrderSchema = SchemaFactory.createForClass(Order);
+
+export { OrderSchema };

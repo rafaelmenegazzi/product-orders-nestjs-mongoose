@@ -27,4 +27,12 @@ export class Product extends BaseEntity {
   }
 }
 
-export const ProductSchema = SchemaFactory.createForClass(Product);
+const ProductSchema = SchemaFactory.createForClass(Product);
+
+ProductSchema.virtual('order', {
+  ref: 'Order',
+  localField: '_id',
+  foreignField: 'products',
+});
+
+export { ProductSchema };

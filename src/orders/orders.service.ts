@@ -24,7 +24,7 @@ export class OrdersService {
   }
 
   async findAll(): Promise<Order[]> {
-    const orders = await this.orderModel.find().populate('products');
-    return orders.map((o) => plainToClass(Order, o.toJSON()));
+    const orders = await this.orderModel.find().populate('products').lean();
+    return orders.map((o) => plainToClass(Order, o));
   }
 }
